@@ -1,0 +1,16 @@
+---
+- name: restart php
+  service:
+    name: php
+    state: restarted
+    enabled: true
+
+- name: start php
+  service:
+    name: php
+    state: started
+
+- name: reload php
+  service:
+    name: php
+    state: reloaded

@@ -1,0 +1,31 @@
+---
+- name: create php dirs
+  file:
+    path: "{{ item|safe|trim }}"
+    state: directory
+    owner: "{{ php_user }}"
+    group: "{{ php_group }}"
+    mode: 0755
+    recurse: true
+  changed_when: "False"
+  with_items:
+    - "{{ php_opt_dir }}"
+    - "{{ php_config_dir }}"
+    - "{{ php_config_dir }}/pool"
+
+- name: transfer pool.d php configuration
+  template:
+    src: "{{ item }}"
+    dest: "{{ php_config_dir }}/pool/{{ item | basename }}"
+    mode: 0755
+    force: true
+  with_fileglob:
+    - ../templates/config/pool.d/*.conf
+
+
+- name: transfer php.ini php-fpm configuration
+  template:
+    src: config/php.ini
+    dest: "{{ php_config_dir }}/php.ini"
+    mode: 0755
+    force: true
